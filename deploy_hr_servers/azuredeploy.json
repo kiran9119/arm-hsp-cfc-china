@@ -1,0 +1,269 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "regionID": {
+            "type": "string"
+        },
+        "vnetName": {
+            "type": "string"
+        },
+        "vnetResourceGroup": {
+            "type": "string"
+        },
+        "subnetName": {
+            "type": "string"
+        },
+        "subnetBaseIP": {
+            "type": "string"
+        },
+        "numberOfMachines": {
+            "type": "int"
+        },
+        "serversize": {
+            "type": "string",
+            "defaultValue": "Standard_D2s_v3"
+        },
+        "infrastructureKeyVault": {
+            "type": "object",
+            "metadata": {
+                "description": "the az keyvault access targets"
+            }
+        },
+        "appopsKeyVault": {
+            "type": "object",
+            "metadata": {
+                "description": "the appops keyvault access targets"
+            }
+        },
+        "diskEncryptionVaultInfo": {
+            "type": "object"
+        },
+        "environmentLevel": {
+            "type": "int"
+        },
+        "ADDomain": {
+            "type": "string"
+        },
+        "oms": {
+            "type": "object"
+        },
+        "chef": {
+            "type": "object"
+        },
+        "newNamingConvention": {
+            "type":  "bool"
+        }
+    },
+    "variables": {
+        "oldTierCode": "hr",
+        "newTierCode": "cfhr",
+        "tierCode": "[if(equals(parameters('newNamingConvention'), bool('true')), variables('newTierCode'), variables('oldTierCode'))]",
+        "tierName": "[concat(parameters('environmentLevel'), variables('tierCode'))]",
+        "vipLastOctet": "110",
+        "vip": "[concat(parameters('subnetBaseIP'), '.', variables('vipLastOctet'))]",
+        "lastOctetStarts": 100,
+        "infrastructureVaultRoot": "[concat('/subscriptions/', parameters('infrastructureKeyVault').subscriptionID, '/resourceGroups/', parameters('infrastructureKeyVault').resourceGroup, '/providers/Microsoft.KeyVault/vaults/', parameters('infrastructureKeyVault').vaultName)]",
+        "appopsVaultRoot": "[concat('/subscriptions/', parameters('appopsKeyVault').subscriptionID, '/resourceGroups/', parameters('appopsKeyVault').resourceGroup, '/providers/Microsoft.KeyVault/vaults/', parameters('appopsKeyVault').vaultName)]",
+        "SaSKey": "?sv=2017-07-29&ss=f&srt=sco&sp=rl&se=2020-04-24T12:18:31Z&st=2018-04-24T04:18:31Z&spr=https&sig=ExxG0FM7%2BQUzzhisRRCl%2FzAMbj7bwM3BpVZde6%2F8O2s%3D",
+        "serverSetTemplate": "[concat('https://ncrsharedtemplates.file.core.windows.net/arm-application-tier/4.2.31.0/serverset.azuredeploy.json', variables('SaSKey'))]",
+        "encVaultRoot": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('diskEncryptionVaultInfo').resourceGroup, '/providers/Microsoft.KeyVault/vaults/', parameters('diskEncryptionVaultInfo').vaultName)]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-01-01",
+            "name": "hrServerDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('serverSetTemplate')]",
+                    "contentVersion": "4.2.31.0"
+                },
+                "parameters": {
+                    "adminUserName": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('infrastructureVaultRoot')]"
+                            },
+                            "secretName": "MachineAdminUsername"
+                        }
+                    },
+                    "adminPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('infrastructureVaultRoot')]"
+                            },
+                            "secretName": "MachineAdminPassword"
+                        }
+                    },
+                    "domainPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('infrastructureVaultRoot')]"
+                            },
+                            "secretName": "DomainAdminPassword"
+                        }
+                    },
+                    "domainUsername": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('infrastructureVaultRoot')]"
+                            },
+                            "secretName": "DomainAdminUsername"
+                        }
+                    },
+                    "encryptionAADClientID": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('encVaultRoot')]"
+                            },
+                            "secretName": "aadClientID"
+                        }
+                    },
+                    "encryptionAADClientSecret": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('encVaultRoot')]"
+                            },
+                            "secretName": "aadClientSecret"
+                        }
+                    },
+                    "encryptionPassphrase": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('encVaultRoot')]"
+                            },
+                            "secretName": "EncryptionPassphrase"
+                        }
+                    },
+                    "chefBase64ValidatorKey": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('infrastructureVaultRoot')]"
+                            },
+                            "secretName": "ChefValidatorKey"
+                        }
+                    },
+                    "vaultRoleID": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('appopsVaultRoot')]"
+                            },
+                            "secretName": "vault-role-id-cfc"
+                        }
+                    },
+                    "vaultSecretID": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[variables('appopsVaultRoot')]"
+                            },
+                            "secretName": "vault-secret-id-cfc"
+                        }
+                    },
+                    "product": {
+                        "value": {
+                            "name": "[parameters('regionID')]",
+                            "tier_name": "[concat('-', variables('tierName'))]"
+                        }
+                    },
+                    "network": {
+                        "value": {
+                            "virtualNetwork": {
+                                "name": "[parameters('vnetName')]",
+                                "resourceGroup": "[parameters('vnetResourceGroup')]"
+                            },
+                            "subnet": {
+                                "name": "[parameters('subnetName')]",
+                                "vmBaseIP": "[parameters('subnetBaseIP')]",
+                                "lastOctetStart": "[variables('lastOctetStarts')]"
+                            },
+                            "loadBalancing": {
+                                "enabled": true,
+                                "ipType": "Private",
+                                "ipConfiguration": {
+                                    "public": {
+                                        "name": "DNE",
+                                        "resourceGroup": "DNE"
+                                    },
+                                    "private": {
+                                        "subnet": "[parameters('subnetName')]",
+                                        "staticIP": "[variables('vip')]"
+                                    }
+                                },
+                                "rules": {
+                                    "take": "two",
+                                    "first": {
+                                        "port": 443,
+                                        "backendPort": 443,
+                                        "timeout": 30,
+                                        "loadDistribution": "Default",
+                                        "protocol": "tcp"
+                                    },
+                                    "second": {
+                                        "port": 80,
+                                        "backendPort": 80,
+                                        "timeout": 20,
+                                        "loadDistribution": "Default",
+                                        "protocol": "tcp"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "infrastructure": {
+                        "value": {
+                            "numberOfServers": "[parameters('numberOfMachines')]",
+                            "serverSize": "[parameters('serverSize')]",
+                            "operatingSystem": {
+                                "imagePublisher": "MicrosoftWindowsServer",
+                                "imageOffer": "WindowsServer",
+                                "version": "2016-Datacenter"
+                            },
+                            "disk": {
+                                "osDriveStorageAccountSize": "Standard_LRS",
+                                "attachedDisk": {
+                                    "enabled": true,
+                                    "type": "Standard_LRS",
+                                    "linuxMountPath": "/data",
+                                    "sizeGB": 30
+                                },
+                                "encryption": {
+                                    "enabled": true,
+                                    "keyVaultName": "[parameters('diskEncryptionVaultInfo').vaultName]",
+                                    "sequenceNumber": "2fa8d1b8-2e46-4b59-827c-19aebd2d6690",
+                                    "keyVaultSubscriptionID": "[subscription().subscriptionID]",
+                                    "keyVaultResourceGroup": "[parameters('diskEncryptionVaultInfo').resourceGroup]",
+                                    "KeK": {
+                                        "Name": "KEK",
+                                        "Algorithm": "RSA-OAEP",
+                                        "KeyVersion": "[parameters('diskEncryptionVaultInfo').keyVersion]"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "activeDirectory": {
+                        "value": {
+                            "enabled": true,
+                            "domain": "[parameters('ADDomain')]",
+                            "joinOptions": 3,
+                            "linuxAdminGroups": "ncrsaasadmins,appopsadmins"
+                        }
+                    },
+                    "chef": {
+                        "value": "[parameters('chef')]"
+                    },
+                    "vault": {
+                        "value": {
+                            "enabled": true
+                        }
+                    },
+                    "oms": {
+                        "value": "[parameters('oms')]"
+                    }
+                }
+            }
+        }
+    ]
+}

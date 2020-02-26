@@ -1,0 +1,75 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "2.0.0.0",
+    "parameters": {
+        "regionID": {
+            "value": "ECA1"
+        },
+        "vnetName": {
+            "value": "HSP-APPOPS-CFC-0-PREP-ECA01-VNET"
+        },
+        "vnetResourceGroup": {
+            "value": "HSP-APPOPS-CFC-0-Network-PREP-ECA01"
+        },
+        "subnetName": {
+            "value": "HSP-APPOPS-CFC-0-DD-PREP-ECA01-SNET"
+        },
+        "subnetBaseIP": {
+            "value": "10.1.54"
+        },
+        "numberOfMachines": {
+            "value": 4
+        },
+        "serverSize": {
+            "value": "Standard_b2ms"
+        },
+        "infrastructureKeyVault": {
+            "value": {
+                "subscriptionID": "552d3d01-0f23-4c99-9d91-d65e09d796df",
+                "resourceGroup": "ITS-SAAS-KEYVAULT-PROD-NUA01-RG",
+                "vaultName": "NCP-MGMT-KeyVault"
+            }
+        },
+        "appopsKeyVault": {
+            "value": {
+                "subscriptionID": "552d3d01-0f23-4c99-9d91-d65e09d796df",
+                "resourceGroup": "HSP-APPOPS-KEYVAULT-PROD-NUA01-RG",
+                "vaultName": "HSP-APPOPS-KeyVault"
+            }
+        },
+        "diskEncryptionVaultInfo": {
+            "value": {
+                "resourceGroup": "HSP-KV-CFC-ECA01-PREP-RG",
+                "vaultName": "HSP-KV-CFC-ECA01-PREP",
+                "keyVersion": "fa01a96e88b04e96b89169531a4f118c"
+            }
+        },
+        "environmentLevel": {
+            "value": 1
+        },
+        "ADDomain": {
+            "value": "hsp.preprod.ncrsaas.cn"
+        },
+        "oms": {
+            "value": {
+                "enabled": true,
+                "OMSWorkspaceID": "af0b3623-32e0-4d1c-85e3-329f6c54afd7",
+                "OMSWorkspaceKey": "OLGhP8kSRDZYAJ6027hLOAPwQBjuxbCnn7toWcNvV8Pe/zlqQXEpYJxsF5BXeWn7SbMz4N81Wk5eG0iYeQoKQw=="
+            }
+        },
+        "chef": {
+            "value": {
+                "enabled": true,
+                "policyGroup": "eca01_prep",
+                "policyName": "cfc_dc_dd",
+                "validatorClientName": "ncr-prep-azure-validator",
+                "serverUrl": "https://chef.preprod.ncrsaas.cn",
+                "organization": "ncr-prep-azure",
+                "version": "14.12.9"
+            }
+        },
+        "newNamingConvention": {
+            "value": true
+            }
+    }
+}
