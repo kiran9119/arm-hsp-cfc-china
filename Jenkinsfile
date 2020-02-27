@@ -14,8 +14,8 @@ node('arm'){
     execute "rake utils:git_push_if_needed"
 
     uploadToArtifactory {
-        serverId = 'azure-prod'
-        artifactPattern = "arm-cfc-${repo_version}.zip"
+        serverId = 'ncrsaas-china'
+        artifactPattern = "arm-cfc-china-${repo_version}.zip"
         repository = 'azure'
         uploadPath = "hospitality/cfc/"
     }

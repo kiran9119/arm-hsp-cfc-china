@@ -146,7 +146,7 @@ namespace :publish do
   task :package => ['bump:patch'] do
     require 'zip'
     version = Gem::Version::new(File.read('VERSION').gsub!('"',''))
-    package_name = 'arm-cfc'
+    package_name = 'arm-cfc-china'
     zipfile_path = "#{package_name}-#{version}.zip"
 
     FileUtils.rm zipfile_path if File.exist? zipfile_path
