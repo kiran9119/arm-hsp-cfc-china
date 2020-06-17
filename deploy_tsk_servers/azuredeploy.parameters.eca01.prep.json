@@ -25,14 +25,14 @@
         },
         "infrastructureKeyVault": {
             "value": {
-                "subscriptionID": "552d3d01-0f23-4c99-9d91-d65e09d796df",
+                "subscriptionID": "bbf7a717-5c65-471e-9131-ba167bdf5767",
                 "resourceGroup": "ITS-SAAS-KEYVAULT-PROD-NUA01-RG",
                 "vaultName": "NCP-MGMT-KeyVault"
             }
         },
         "appopsKeyVault": {
             "value": {
-                "subscriptionID": "552d3d01-0f23-4c99-9d91-d65e09d796df",
+                "subscriptionID": "bbf7a717-5c65-471e-9131-ba167bdf5767",
                 "resourceGroup": "HSP-APPOPS-KEYVAULT-PROD-NUA01-RG",
                 "vaultName": "HSP-APPOPS-KeyVault"
             }
@@ -53,7 +53,7 @@
         "oms": {
             "value": {
                 "enabled": true,
-                "OMSWorkspaceID": "af0b3623-32e0-4d1c-85e3-329f6c54afd7",
+                "OMSWorkspaceID": "bbf7a717-5c65-471e-9131-ba167bdf5767",
                 "OMSWorkspaceKey": "OLGhP8kSRDZYAJ6027hLOAPwQBjuxbCnn7toWcNvV8Pe/zlqQXEpYJxsF5BXeWn7SbMz4N81Wk5eG0iYeQoKQw=="
             }
         },
