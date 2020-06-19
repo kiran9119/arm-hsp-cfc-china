@@ -1,9 +1,13 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "regionID": {
             "type": "string"
+        },
+        "timeZoneSetting": {
+            "type": "string",
+            "defaultValue": "UTC"
         },
         "vnetName": {
             "type": "string"
@@ -51,6 +55,12 @@
         "chef": {
             "type": "object"
         },
+        "loadbalancerSKU": {
+            "type": "object"
+        },
+        "publicIPSKUName": {
+            "type": "object"
+         },
         "newNamingConvention": {
             "type":  "bool"
         }
@@ -65,20 +75,20 @@
         "lastOctetStarts": 36,
         "infrastructureVaultRoot": "[concat('/subscriptions/', parameters('infrastructureKeyVault').subscriptionID, '/resourceGroups/', parameters('infrastructureKeyVault').resourceGroup, '/providers/Microsoft.KeyVault/vaults/', parameters('infrastructureKeyVault').vaultName)]",
         "appopsVaultRoot": "[concat('/subscriptions/', parameters('appopsKeyVault').subscriptionID, '/resourceGroups/', parameters('appopsKeyVault').resourceGroup, '/providers/Microsoft.KeyVault/vaults/', parameters('appopsKeyVault').vaultName)]",
-        "SaSKey": "?sv=2017-07-29&ss=f&srt=sco&sp=rl&se=2020-04-24T12:18:31Z&st=2018-04-24T04:18:31Z&spr=https&sig=ExxG0FM7%2BQUzzhisRRCl%2FzAMbj7bwM3BpVZde6%2F8O2s%3D",
+        "SaSKey": "?sv=2019-02-02&ss=fq&srt=sco&sp=rl&se=2021-10-31T20:31:25Z&st=2020-04-24T12:31:25Z&spr=https&sig=Gx25gMXFA0hdBaC5IDtmidGk3f0x7tCVq3SK4y1I9Mk%3D",
         "serverSetTemplate": "[concat('https://ncrsharedtemplates.file.core.windows.net/arm-application-tier/4.2.31.0/serverset.azuredeploy.json', variables('SaSKey'))]",
         "encVaultRoot": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('diskEncryptionVaultInfo').resourceGroup, '/providers/Microsoft.KeyVault/vaults/', parameters('diskEncryptionVaultInfo').vaultName)]"
     },
     "resources": [
         {
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2017-08-01",
             "name": "hostServerDeployment",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[variables('serverSetTemplate')]",
-                    "contentVersion": "4.2.31.0"
+                    "contentVersion": "4.3.48.0"
                 },
                 "parameters": {
                     "adminUserName": {
@@ -181,6 +191,8 @@
                             "loadBalancing": {
                                 "enabled": true,
                                 "ipType": "Private",
+                                "name": "[parameters('loadbalancerSKU').name]",
+                                "tier": "[parameters('loadbalancerSKU').tier]",
                                 "ipConfiguration": {
                                     "public": {
                                         "name": "DNE",
@@ -205,6 +217,20 @@
                                         "backendPort": 80,
                                         "timeout": 20,
                                         "loadDistribution": "Default",
+                                        "protocol": "tcp"
+                                    },
+                                    "third": {
+                                        "port": 0,
+                                        "backendPort": 0,
+                                        "loadDistribution": "Default",
+                                        "timeout": 5,
+                                        "protocol": "tcp"
+                                    },
+                                    "fourth": {
+                                        "port": 0,
+                                        "backendPort": 0,
+                                        "loadDistribution": "Default",
+                                        "timeout": 5,
                                         "protocol": "tcp"
                                     }
                                 }
