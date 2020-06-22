@@ -76,7 +76,7 @@
         "infrastructureVaultRoot": "[concat('/subscriptions/', parameters('infrastructureKeyVault').subscriptionID, '/resourceGroups/', parameters('infrastructureKeyVault').resourceGroup, '/providers/Microsoft.KeyVault/vaults/', parameters('infrastructureKeyVault').vaultName)]",
         "appopsVaultRoot": "[concat('/subscriptions/', parameters('appopsKeyVault').subscriptionID, '/resourceGroups/', parameters('appopsKeyVault').resourceGroup, '/providers/Microsoft.KeyVault/vaults/', parameters('appopsKeyVault').vaultName)]",
         "SaSKey": "?sv=2019-02-02&ss=fq&srt=sco&sp=rl&se=2021-10-31T20:31:25Z&st=2020-04-24T12:31:25Z&spr=https&sig=Gx25gMXFA0hdBaC5IDtmidGk3f0x7tCVq3SK4y1I9Mk%3D",
-        "serverSetTemplate": "[concat('https://ncrsharedtemplates.file.core.windows.net/arm-application-tier/4.2.31.0/serverset.azuredeploy.json', variables('SaSKey'))]",
+        "serverSetTemplate": "[concat('https://ncrsharedtemplates.file.core.windows.net/arm-application-tier/4.3.48.0/serverset.azuredeploy.json', variables('SaSKey'))]",
         "encVaultRoot": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('diskEncryptionVaultInfo').resourceGroup, '/providers/Microsoft.KeyVault/vaults/', parameters('diskEncryptionVaultInfo').vaultName)]"
     },
     "resources": [

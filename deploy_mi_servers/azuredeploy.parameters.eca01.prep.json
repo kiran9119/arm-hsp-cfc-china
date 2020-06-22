@@ -36,8 +36,8 @@
         "appopsKeyVault": {
             "value": {
                 "subscriptionID": "bbf7a717-5c65-471e-9131-ba167bdf5767",
-                "resourceGroup": "ITS-SAAS-KEYVAULT-PREP-NUA01-RG",
-                "vaultName": "NCP-MGMT-KeyVault"
+                "resourceGroup": "HSP-APPOPS-KEYVAULT-PREP-ECA01-RG",
+                "vaultName": "HSP-APPOPS-KeyVault"
             }
         },
         "diskEncryptionVaultInfo": {
@@ -68,7 +68,8 @@
                 "validatorClientName": "ncr-prep-azure-validator",
                 "serverUrl": "https://chef.preprod.ncrsaas.cn",
                 "organization": "ncr-prep-azure",
-                "version": "14.12.9"
+                "version": "14.12.9",
+                "chef_daemon_interval": 0
             }
         },
         "loadbalancerSKU": {
