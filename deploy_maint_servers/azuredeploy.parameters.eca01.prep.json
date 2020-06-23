@@ -1,9 +1,12 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
     "contentVersion": "2.0.0.0",
     "parameters": {
         "regionID": {
             "value": "ECA1"
+        },
+        "timeZoneSetting": {
+          "value": "UTC"
         },
         "vnetName": {
             "value": "HSP-APPOPS-CFC-0-PREP-ECA01-VNET"
@@ -33,7 +36,7 @@
         "appopsKeyVault": {
             "value": {
                 "subscriptionID": "bbf7a717-5c65-471e-9131-ba167bdf5767",
-                "resourceGroup": "HSP-APPOPS-KEYVAULT-PREP-NUA01-RG",
+                "resourceGroup": "HSP-APPOPS-KEYVAULT-PREP-ECA01-RG",
                 "vaultName": "HSP-APPOPS-KeyVault"
             }
         },
@@ -53,7 +56,7 @@
         "oms": {
             "value": {
                 "enabled": true,
-                "OMSWorkspaceID": "bbf7a717-5c65-471e-9131-ba167bdf5767",
+                "OMSWorkspaceID": "af0b3623-32e0-4d1c-85e3-329f6c54afd7",
                 "OMSWorkspaceKey": "OLGhP8kSRDZYAJ6027hLOAPwQBjuxbCnn7toWcNvV8Pe/zlqQXEpYJxsF5BXeWn7SbMz4N81Wk5eG0iYeQoKQw=="
             }
         },
@@ -65,7 +68,19 @@
                 "validatorClientName": "ncr-prep-azure-validator",
                 "serverUrl": "https://chef.preprod.ncrsaas.cn",
                 "organization": "ncr-prep-azure",
-                "version": "14.12.9"
+                "version": "14.12.9",
+                "chef_daemon_interval": 0
+            }
+        },
+        "loadbalancerSKU": {
+            "value": {
+                "name": "Standard",
+                "tier": "Regional"
+            }
+        },
+        "publicIPSKUName": {
+            "value":{
+                "name": "Standard"
             }
         },
         "newNamingConvention": {
