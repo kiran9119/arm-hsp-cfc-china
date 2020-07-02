@@ -24,7 +24,7 @@
             "value": 1
         },
         "serverSize": {
-            "value": "Standard_b2ms"
+            "value": "Standard_D2_v3"
         },
         "infrastructureKeyVault": {
             "value": {
@@ -37,7 +37,7 @@
             "value": {
                 "subscriptionID": "bbf7a717-5c65-471e-9131-ba167bdf5767",
                 "resourceGroup": "HSP-APPOPS-KEYVAULT-PREP-ECA01-RG",
-                "vaultName": "HSP-APPOPS-KeyVault"
+                "vaultName": "HSP-PREP-APPOPS-KeyVault"
             }
         },
         "diskEncryptionVaultInfo": {
@@ -56,8 +56,8 @@
         "oms": {
             "value": {
                 "enabled": true,
-                "OMSWorkspaceID": "af0b3623-32e0-4d1c-85e3-329f6c54afd7",
-                "OMSWorkspaceKey": "OLGhP8kSRDZYAJ6027hLOAPwQBjuxbCnn7toWcNvV8Pe/zlqQXEpYJxsF5BXeWn7SbMz4N81Wk5eG0iYeQoKQw=="
+                "OMSWorkspaceID": "ea139482-c0cc-493c-b096-04acf9ece774",
+                "OMSWorkspaceKey": "LDNycbonE/9ff0vM6DFdNgijh0HiT+QhbfH1PvAqCuhuBT3Nho3ZyTEzcF/fvkF4Asndivq8p1wKJtpVX0YGIQ=="
             }
         },
         "chef": {

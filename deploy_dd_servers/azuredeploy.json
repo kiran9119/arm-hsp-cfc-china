@@ -99,6 +99,9 @@
                             "secretName": "MachineAdminUsername"
                         }
                     },
+                    "timeZoneSetting": {
+                        "value": "[parameters('timeZoneSetting')]"
+                    },
                     "adminPassword": {
                         "reference": {
                             "keyVault": {
