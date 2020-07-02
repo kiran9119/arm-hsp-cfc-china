@@ -21,7 +21,7 @@
             "value": "10.1.54"
         },
         "numberOfMachines": {
-            "value": 3
+            "value": 1
         },
         "serverSize": {
             "value": "Standard_b2ms"
